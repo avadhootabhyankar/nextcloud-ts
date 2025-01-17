@@ -1,0 +1,63 @@
+version: "3.9"
+
+services:
+  ts-network:
+    image: tailscale/tailscale:latest
+    hostname: nextcloud #-<6digit-random-string> # nextcloud-erlnvs
+    environment:
+      - TS_AUTHKEY=tskey-auth-kDoScrxeDR11CNTRL-zg9V5wpahfMjMr3JC6iffMuqcVnJ4ytY
+      - TS_SERVE_CONFIG=/config/nextcloud.json
+      - TS_STATE_DIR=/var/lib/tailscale
+    volumes:
+      - ./config:/config
+      - tailscale-data-nextcloud:/var/lib/tailscale
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    cap_add:
+      - net_admin
+      - sys_module
+    restart: unless-stopped
+
+  db:
+    image: mariadb:11.4
+    restart: unless-stopped
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW --innodb-file-per-table=1 --skip-innodb-read-only-compressed
+    volumes:
+      - db:/var/lib/mysql
+    env_file:
+      - db.env
+
+  redis:
+    image: redis
+    restart: always
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+
+  app:
+    image: nextcloud:latest
+    restart: unless-stopped
+    volumes:
+      - nextcloud:/var/www/html
+      - nextcloud-data:/data
+    environment:
+      - MYSQL_HOST=db
+      - REDIS_HOST_PASSWORD=${REDIS_PASSWORD}
+      - NEXTCLOUD_DATA_DIR=/data
+    env_file:
+      - db.env
+    depends_on:
+      - db
+      - redis
+      - ts-network
+    network_mode: service:ts-network
+
+volumes:
+  tailscale-data-nextcloud:
+    driver: local
+  db:
+    external: true
+  nextcloud:
+    external: true
+  nextcloud-data:
+    external: true
