@@ -238,7 +238,8 @@ d42995de6995   redis                        "docker-entrypoint.s…"   3 minutes
 - Time to fix `Security & setup warnings`
   <br/><img src="./images/nextcloud_security_&_setup_warnings.png" alt="Security & Setup Warnings" width="50%">
 
-  - Edit config.php on Nextcloud container and add following lines at the end
+  - Edit config.php on Nextcloud container and/update the lines as per the config.php present in this repository
+    - `#` comments are added to indicate which lines to add/update
 
   ```bash
   sudo docker exec -it <container-id> bash
