@@ -1,11 +1,11 @@
 # Nextcloud Setup with Docker and Tailscale
 
-This setup is to host Nextcloud on Docker running on Raspberry PI-Ubuntu combo
-An external storage device (hard drive) is a attached to the Raspberry PI on which all your nextcloud data will be stored
-It uses Tailscale for networking and https as well
-Using which you can access your Nextcloud server from anywhere in the world
+- This setup is to host Nextcloud on Docker running on Raspberry PI-Ubuntu combo
+- An external storage device (hard drive) is a attached to the Raspberry PI on which all your nextcloud data will be stored
+- It uses Tailscale for networking and https as well
+- Using which you can access your Nextcloud server from anywhere in the world
 
-# Running Nextcloud
+# Running Nextcloud on Docker vis Tailscale Networking
 
 ## Preparing hard drive ready for nextcloud
 
@@ -50,6 +50,8 @@ Creating journal (262144 blocks): done
 Writing superblocks and filesystem accounting information: done
 ```
 
+- Create a directory to mount the newly formatted drive
+
 ```bash
 sudo mkdir -p /mnt/files
 lsblk
@@ -65,7 +67,7 @@ mmcblk0     179:0    0 119.4G  0 disk
 └─mmcblk0p2 179:2    0 118.9G  0 part /
 ```
 
-- Mount the drive
+- Mount the newly formatted drive
 
 ```bash
 sudo mount /dev/sda /mnt/files/
@@ -125,11 +127,9 @@ cd ~/nextcloud-ts
 ```bash
 sudo mkdir -p /mnt/files/docker-volumes/db
 sudo mkdir -p /mnt/files/docker-volumes/nextcloud
-sudo mkdir -p /mnt/files/docker-volumes/nextcloud-data
 
 sudo docker volume create --driver local --opt type=none --opt device=/mnt/files/docker-volumes/db --opt o=bind db
 sudo docker volume create --driver local --opt type=none --opt device=/mnt/files/docker-volumes/nextcloud --opt o=bind nextcloud
-sudo docker volume create --driver local --opt type=none --opt device=/mnt/files/docker-volumes/nextcloud-data --opt o=bind nextcloud-data
 ```
 
 - Inspect externally created docker volumes
@@ -178,27 +178,6 @@ sudo docker volume inspect nextcloud
 ]
 ```
 
-- Create env files for Mariadb and Redis to store credentials
-
-```bash
-vi db.env
-```
-
-```plaintext
-MYSQL_ROOT_PASSWORD=KHxSD2zEEsNbL6uo
-MYSQL_PASSWORD=zK7ryCH7YDgBwKB0
-MYSQL_DATABASE=db
-MYSQL_USER=nextcloud
-```
-
-```bash
-vi .env
-```
-
-```plaintext
-REDIS_PASSWORD=GBRfhkBKBrw0xf6f
-```
-
 - Up Nextcloud service
 
 ```bash
@@ -243,7 +222,7 @@ d42995de6995   redis                        "docker-entrypoint.s…"   3 minutes
 - Connect to your Tailnet
   <br/><img src="./images/tailscale_connected.png" alt="Tailscale Connected" width="50%">
 
-- In the browser on Computer access Nextcloud Machine using URL similar to below
+- In the browser on Computer access Nextcloud Machine using https://FCDN similar to below
 
   - It will create a HTTPS certificate first using `Let's Encrypt` so first load will take some time
     https://nextcloud.taileXXXX.ts.net
@@ -251,13 +230,13 @@ d42995de6995   redis                        "docker-entrypoint.s…"   3 minutes
 - Once Nextcloud landing page is loaded create a first Admin account
 
 - Set a admin username and strong password
-  <br/><img src="./images/nextcloud_create_admin_acc.png" alt="Tailscale Connected" width="50%">
+  <br/><img src="./images/nextcloud_create_admin_acc.png" alt="Nextcloud Create Admin Account" width="50%">
 
 - Open Administration Settings
-  <br/><img src="./images/nextcloud_administration_settings.png" alt="Tailscale Connected" width="50%">
+  <br/><img src="./images/nextcloud_administration_settings.png" alt="Nextcloud Administration Settings" width="50%">
 
 - Time to fix `Security & setup warnings`
-  <br/><img src="./images/nextcloud_security_&_setup_warnings.png" alt="Tailscale Connected" width="50%">
+  <br/><img src="./images/nextcloud_security_&_setup_warnings.png" alt="Security & Setup Warnings" width="50%">
 
   - Edit config.php on Nextcloud container and add following lines at the end
 
@@ -271,7 +250,7 @@ d42995de6995   redis                        "docker-entrypoint.s…"   3 minutes
   apt update && apt install vim -y && vi config/config.php
   ```
 
-  -
+  - This will remove one of the warnings from security & setup warnings
 
   ```bash
   cd /var/www/html && php occ maintenance:repair --include-expensive
@@ -284,6 +263,9 @@ d42995de6995   redis                        "docker-entrypoint.s…"   3 minutes
   ```
 
 - Create user accouts from `Accounts`
+  <br/><img src="./images/nextcloud_create_user_accounts.png" alt="Nextcloud Accounts Menu" width="50%">
+
+  <br/><img src="./images/nextcloud_create_new_user_account.png" alt="Nextcloud Create New Account" width="50%">
 
 # Stop Nextcloud
 
