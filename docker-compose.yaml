@@ -3,7 +3,7 @@ version: "3.9"
 services:
   ts-network:
     image: tailscale/tailscale:latest
-    hostname: nextcloud #-<6digit-random-string> # nextcloud-erlnvs
+    hostname: nextcloud
     environment:
       - TS_AUTHKEY=tskey-auth-kDoScrxeDR11CNTRL-zg9V5wpahfMjMr3JC6iffMuqcVnJ4ytY
       - TS_SERVE_CONFIG=/config/nextcloud.json
