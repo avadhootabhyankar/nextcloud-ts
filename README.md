@@ -113,7 +113,7 @@ sudo snap install docker
 - Clone the repository
 
 ```bash
-git clone git@github.com:avadhootabhyankar/nextcloud.git
+git clone https://github.com/avadhootabhyankar/nextcloud-ts.git
 ```
 
 - Change directory to github repo
