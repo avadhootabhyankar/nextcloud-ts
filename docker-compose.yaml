@@ -39,11 +39,9 @@ services:
     restart: unless-stopped
     volumes:
       - nextcloud:/var/www/html
-      - nextcloud-data:/data
     environment:
       - MYSQL_HOST=db
       - REDIS_HOST_PASSWORD=${REDIS_PASSWORD}
-      - NEXTCLOUD_DATA_DIR=/data
     env_file:
       - db.env
     depends_on:
@@ -58,6 +56,4 @@ volumes:
   db:
     external: true
   nextcloud:
-    external: true
-  nextcloud-data:
     external: true
