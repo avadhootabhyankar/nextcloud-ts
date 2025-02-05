@@ -81,11 +81,7 @@ lost+found
 - Add permanent mount & add following line at the end of the file
 
 ```bash
-sudo vi /etc/fstab
-```
-
-```plaintext
-/dev/sda /mnt/files ext4 defaults 0 2
+echo "/dev/sda /mnt/files ext4 defaults 0 2" | sudo tee -a /etc/fstab
 ```
 
 ## Tailscale Setup
