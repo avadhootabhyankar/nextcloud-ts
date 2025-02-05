@@ -252,6 +252,8 @@ d42995de6995   redis                        "docker-entrypoint.s…"   3 minutes
   ```bash
   sudo docker exec -u www-data nextcloud-ts-app-1 php occ maintenance:repair --include-expensive
   sudo docker exec -u www-data nextcloud-ts-app-1 php occ db:add-missing-indices
+  sudo docker exec nextcloud-ts-app-1 bash -c "echo 'Header always set Strict-Transport-Security \"max-age=15552000; includeSubDomains; preload\"' >> /etc/apache2/conf-available/security.conf && apachectl restart"
+
   ```
 
   - Restart Nexecloud container
