@@ -247,10 +247,11 @@ d42995de6995   redis                        "docker-entrypoint.s…"   3 minutes
   apt update && apt install vim -y && vi config/config.php
   ```
 
-  - This will remove one of the warnings from security & setup warnings
+  - This will remove couple of the warnings from security & setup warnings
 
   ```bash
-  cd /var/www/html && php occ maintenance:repair --include-expensive
+  sudo docker exec -u www-data nextcloud-ts-app-1 php occ maintenance:repair --include-expensive
+  sudo docker exec -u www-data nextcloud-ts-app-1 php occ db:add-missing-indices
   ```
 
   - Restart Nexecloud container
