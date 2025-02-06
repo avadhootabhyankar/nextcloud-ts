@@ -5,7 +5,7 @@ services:
     image: tailscale/tailscale:latest
     hostname: nextcloud
     environment:
-      - TS_AUTHKEY=tskey-auth-kDoScrxeDR11CNTRL-zg9V5wpahfMjMr3JC6iffMuqcVnJ4ytY
+      - TS_AUTHKEY=${TAILSCALE_AUTH_KEY}  # Set this in .env file
       - TS_SERVE_CONFIG=/config/nextcloud.json
       - TS_STATE_DIR=/var/lib/tailscale
     volumes:
