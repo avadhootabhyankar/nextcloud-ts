@@ -174,6 +174,14 @@ sudo docker volume inspect nextcloud
 ]
 ```
 
+- Edit db.env and .env Files to Set Desired Passwords
+  - Edit `db.env`
+    - Replace `MYSQL_ROOT_PASSWORD` value with strong password
+    - Replace `MYSQL_PASSWORD` value with strong password
+  - Edit `.env` file
+    - Replace `REDIS_PASSWORD` value with strong password
+    - Replace `TAILSCALE_AUTH_KEY` value with Auth Key Generated from Tailscale Settings
+
 - Up Nextcloud service
 
 ```bash
